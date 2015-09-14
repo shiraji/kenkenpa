@@ -1,8 +1,6 @@
 # Ken-Ken-Pa
 
-[![Build Status](https://secure.travis-ci.org/shiraji/kenkenpa.png)](http://travis-ci.org/shiraji/kenkenpa)
-
-[![Download](https://api.bintray.com/packages/shiraji/maven/kenkenpa/images/download.svg)](https://bintray.com/shiraji/maven/kenkenpa/_latestVersion)
+[![Build Status](https://secure.travis-ci.org/shiraji/kenkenpa.png)](http://travis-ci.org/shiraji/kenkenpa) [![Download](https://api.bintray.com/packages/shiraji/maven/kenkenpa/images/download.svg)](https://bintray.com/shiraji/maven/kenkenpa/_latestVersion)
 
 Yet, another light weight Java FSM library. This library bollows the idea from [Google AutoValue](https://github.com/google/auto/tree/master/value). It generates a subclass that handles states.
 
