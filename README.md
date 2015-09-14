@@ -65,8 +65,8 @@ simpleFSM.fire(); // => fire! and change current state to STATE2
 
 ## How to create multiple hops?
 
-Sadly, there is limitation on Java (less than Java8). You cannot set same annotation on the same method.
-
+Sadly, there is limitation on Java (less than Java8). You cannot set same annotation on the same method. Instead of using `@Hop`, use `@Hops` which take multiple `@Hop` as parameters.
+.
 ```java
 @KenKenPa("STATE1")
 public abstract class SimpleFSM {
