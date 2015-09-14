@@ -1,4 +1,4 @@
-# kenkenpa
+# Ken-Ken-Pa
 
 [![Build Status](https://secure.travis-ci.org/shiraji/kenkenpa.png)](http://travis-ci.org/shiraji/kenkenpa)
 
@@ -20,7 +20,7 @@ I'm currently working on this. I will publish this library on jcenter/bintray. I
 
 There are a few steps to use this library.
 
-First, add KenKenPa annotation to the abstract class. This abstract class will be state machine class. KenKenPa annotation needs to have a default state. Currently, states are represented by only String value.
+First, add `@KenKenPa` annotation to the abstract class. This abstract class will be a state machine class. `@KenKenPa` annotation needs to have a default state. Currently, states are represented by only String values.
 
 ```java
 @KenKenPa("STATE1")
@@ -39,7 +39,7 @@ public abstract class SimpleFSM {
 }
 ```
 
-Thirdly, add Hop to define state changes.
+Thirdly, add `@Hop` to define state changes.
 
 ```java
 @KenKenPa("STATE1")
@@ -66,7 +66,7 @@ simpleFSM.fire(); // => fire! and change current state to STATE2
 ## How to create multiple hops?
 
 Sadly, there is limitation on Java (less than Java8). You cannot set same annotation on the same method. Instead of using `@Hop`, use `@Hops` which take multiple `@Hop` as parameters.
-.
+
 ```java
 @KenKenPa("STATE1")
 public abstract class SimpleFSM {
@@ -176,6 +176,10 @@ SimpleFSM simpleFSM = SimpleFSM.create();
 simpleFSM.state1ToState2(); // => display 'Now STATE2'
 simpleFSM.state2ToState1(); // => change current state to STATE1
 ```
+
+## How actually works? (For developers)
+
+Added description here...
 
 
 ## Contributing
