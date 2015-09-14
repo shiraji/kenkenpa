@@ -1,5 +1,19 @@
 apply plugin: 'java'
+apply plugin: 'bintray-release'
+
+targetCompatibility = JavaVersion.VERSION_1_7
+sourceCompatibility = JavaVersion.VERSION_1_7
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+}
+
+publish {
+    userOrg = 'shiraji'
+    groupId = 'com.github.shiraji'
+    artifactId = 'kenkenpa'
+    version = '0.0.2'
+    description = 'Test version'
+    website = 'https://github.com/shiraji/kenkenpa'
+    licences = ['Apache-2.0']
 }
