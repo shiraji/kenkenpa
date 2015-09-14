@@ -6,7 +6,7 @@ Yet, another light weight Java FSM library. This library bollows the idea from [
 
 This is alpha version. I will change interface whenever I think it necessary.
 
-Also, until it became beta, I will change commit history.
+Also, until it becames beta, I will change commit history.
 
 # What is Ken-Ken-Pa?
 
@@ -141,6 +141,8 @@ simpleFSM.state2ToState1(); // => change current state to STATE1
 simpleFSM.state1ToState3(); // => display 'Exit from STATE1' and change current state to STATE3
 ```
 
+Add description for string parameter.
+
 ## What is `@Land`?
 
 When children hop to another circle, they 'land' the next circle. `@Land` is an annotation that represents "Run this method when the current state became this state." This annotation is useful when the state have the same initialization steps.
@@ -176,6 +178,10 @@ SimpleFSM simpleFSM = SimpleFSM.create();
 simpleFSM.state1ToState2(); // => display 'Now STATE2'
 simpleFSM.state2ToState1(); // => change current state to STATE1
 ```
+
+Add description for string parameter.
+
+##TODO
 
 ## How actually works? (For developers)
 
