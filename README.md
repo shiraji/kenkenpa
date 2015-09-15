@@ -9,10 +9,6 @@ Yet, another light weight Java FSM library. This library bollows the idea from [
 
 This is still alpha version.
 
-# What is Ken-Ken-Pa?
-
-Ken-Ken-Pa is a Japanese style of Hop Scotch. The difference between Hop Scotch and Ken-Ken-Pa is whether they use squares or circles.
-
 # How to install?
 
 Use gradle.
@@ -43,7 +39,22 @@ dependencies {
 
 `packagingOptions` block is for developers who use other apt libraries.
 
-If you cannot use gradle, then download jar from Download button on top of the documentation .
+If you cannot use gradle, then download jar from Download button on top of the documentation.
+
+# What is Ken-Ken-Pa?
+
+Ken-Ken-Pa is a Japanese style of Hop Scotch. The difference between Hop Scotch and Ken-Ken-Pa is whether they use squares or circles.
+
+# What does this library do?
+
+When you call a method that has `@Hop(from = "STATE1", to = "STATE2")` annotation, this is an image of execution steps of Ken-Ken-Pa.
+
+![execution_image](website/images/execution_image.png)
+
+1. Call `@TakeOff("STATE1")` method if exist
+1. Call the method that has `@Hop(from = "STATE1", to = "STATE2")`
+1. Call `@Land("STATE2")` method if exist
+1. Change the current state to "STATE2"
 
 # How to use?
 
@@ -210,19 +221,7 @@ simpleFSM.state2ToState1(); // => change current state to STATE1
 
 Add description for string parameter.
 
-##TODO
-
-1. Create unit test
-1. Accept State as an Object other than String
-1. Java6? (this may related to above)
-1. Handling unexpected cases
-1. Sample codes (Android and Java)
-
 ## How actually works?
-
-This is the image of execution step.
-
-![execution_image](website/images/execution_image.png)
 
 If the developer create following KenKenPa annotation class
 
@@ -343,6 +342,14 @@ public final class KenKenPa_TestSM extends TestSM {
   }
 }
 ```
+
+##TODO
+
+1. Create unit test
+1. Accept State as an Object other than String
+1. Java6? (this may related to above)
+1. Handling unexpected cases
+1. Sample codes (Android and Java)
 
 ## Contributing
 
