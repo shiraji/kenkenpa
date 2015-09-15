@@ -1,12 +1,13 @@
 # Ken-Ken-Pa
 
-[![Build Status](https://secure.travis-ci.org/shiraji/kenkenpa.png)](http://travis-ci.org/shiraji/kenkenpa) [![Download](https://api.bintray.com/packages/shiraji/maven/kenkenpa/images/download.svg)](https://bintray.com/shiraji/maven/kenkenpa/_latestVersion)
+[![Build Status](https://secure.travis-ci.org/shiraji/kenkenpa.png)](http://travis-ci.org/shiraji/kenkenpa)  [![Software License](https://img.shields.io/badge/license-Apache%202.0-brightgreen.svg)](https://github.com/shiraji/kenkenpa/blob/master/LICENSE)
+
+* [![Download](https://api.bintray.com/packages/shiraji/maven/kenkenpa/images/download.svg)](https://bintray.com/shiraji/maven/kenkenpa/_latestVersion) : kenkenpa
+* [![Download](https://api.bintray.com/packages/shiraji/maven/kenkenpa-compiler/images/download.svg) ](https://bintray.com/shiraji/maven/kenkenpa-compiler/_latestVersion) : kenkenpa-compiler
 
 Yet, another light weight Java FSM library. This library bollows the idea from [Google AutoValue](https://github.com/google/auto/tree/master/value). It generates a subclass that handles states.
 
-This is alpha version. I will change interface whenever I think it necessary.
-
-Also, until it becames beta, I will change commit history.
+This is still alpha version.
 
 # What is Ken-Ken-Pa?
 
@@ -14,7 +15,35 @@ Ken-Ken-Pa is a Japanese style of Hop Scotch. The difference between Hop Scotch 
 
 # How to install?
 
-I'm currently working on this. I will publish this library on jcenter/bintray. I will change this manual as soon as the repository is readly!
+Use gradle.
+
+```gradle
+buildscript {
+    repositories {
+      mavenCentral()
+    }
+    dependencies {
+        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.7'
+    }
+}
+
+apply plugin: 'com.neenbedankt.android-apt'
+
+android {
+    packagingOptions {
+        exclude 'META-INF/services/javax.annotation.processing.Processor'
+    }
+}
+
+dependencies {
+    compile 'com.github.shiraji:kenkenpa:0.0.4'
+    apt 'com.github.shiraji:kenkenpa-compiler:0.0.4'
+}
+```
+
+`packagingOptions` block is for developers who use other apt libraries.
+
+If you cannot use gradle, then download jar from Download button on top of the documentation .
 
 # How to use?
 
@@ -183,10 +212,137 @@ Add description for string parameter.
 
 ##TODO
 
-## How actually works? (For developers)
+1. Create unit test
+1. Accept State as an Object other than String
+1. Java6? (this may related to above)
+1. Handling unexpected cases
+1. Sample codes (Android and Java)
 
-Added description here...
+## How actually works?
 
+This is the image of execution step.
+
+![execution_image](website/images/execution_image.png)
+
+If the developer create following KenKenPa annotation class
+
+```java
+@KenKenPa("STATE1")
+public abstract class TestSM implements GetCurrentState {
+
+    private String mText;
+
+    TestSM(String text) {
+        mText = text;
+    }
+
+    public static TestSM create(String text) {
+        return new KenKenPa_TestSM(text);
+    }
+
+    @Hops({@Hop(from = "STATE1", to = "STATE2"), @Hop(from = "STATE2", to = "STATE1")})
+    public void fire() {
+        System.out.println("Fire!");
+    }
+
+    @Hop(from = "STATE1", to = "STATE2")
+    public int fire2() {
+        return 1;
+    }
+
+    @Land("STATE1")
+    public void land() {
+        System.out.println("land");
+    }
+
+    @TakeOff("STATE2")
+    public void takeOff() {
+        System.out.println("takeoff");
+    }
+}
+```
+
+KenKenPa_TestSM is generated at compile time.
+
+```java
+public final class KenKenPa_TestSM extends TestSM {
+  private String mCurrentState;
+
+  KenKenPa_TestSM(String text) {
+    super(text);
+    this.mCurrentState = "STATE1";
+  }
+
+  @Override
+  @Hops({
+      @Hop(from = "STATE1", to = "STATE2"),
+      @Hop(from = "STATE2", to = "STATE1")
+  })
+  public final void fire() {
+    String newState = takeOff$$fire();
+    super.fire();
+    land$$fire(mCurrentState);
+    mCurrentState = newState;
+  }
+
+  @Override
+  @Hop(
+      from = "STATE1",
+      to = "STATE2"
+  )
+  public final int fire2() {
+    String newState = takeOff$$fire2();
+    int returnValue = super.fire2();
+    land$$fire2(mCurrentState);
+    mCurrentState = newState;
+    return returnValue;
+  }
+
+  @Override
+  public final String getCurrentState() {
+    return mCurrentState;
+  }
+
+  private final String takeOff$$fire() {
+    switch(mCurrentState) {
+      case "STATE1":
+      return "STATE2";
+      case "STATE2":
+      takeOff();
+      return "STATE1";
+    }
+    // No definition! Return the default state
+    return "STATE1";
+  }
+
+  private final void land$$fire(String newState) {
+    switch(newState) {
+      case "STATE1":
+      land();
+      break;
+      case "STATE2":
+      break;
+    }
+  }
+
+  private final String takeOff$$fire2() {
+    switch(mCurrentState) {
+      case "STATE1":
+      return "STATE2";
+    }
+    // No definition! Return the default state
+    return "STATE1";
+  }
+
+  private final void land$$fire2(String newState) {
+    switch(newState) {
+      case "STATE1":
+      land();
+      break;
+    }
+  }
+}
+```
 
 ## Contributing
 
