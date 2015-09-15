@@ -196,7 +196,6 @@ public class KenKenPaProcessor extends AbstractProcessor {
 
         if (constructors.size() == 0) {
             MethodSpec.Builder constructorMethodSpec = MethodSpec.constructorBuilder();
-            constructorMethodSpec.addStatement("super()");
             constructorMethodSpec.addStatement("this.$N = $S", CURRENT_STATE_FIELD_NAME, mDefaultState);
             constructors.add(constructorMethodSpec.build());
         }
