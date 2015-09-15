@@ -7,10 +7,13 @@ import com.github.shiraji.kenkenpa.annotations.Land;
 import com.github.shiraji.kenkenpa.annotations.TakeOff;
 import com.google.auto.service.AutoService;
 import com.google.common.collect.ImmutableSet;
+import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
+import com.squareup.javapoet.ParameterSpec;
+import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
 
 import javax.annotation.processing.AbstractProcessor;
@@ -19,6 +22,7 @@ import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.SourceVersion;
+import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.ExecutableElement;
@@ -28,6 +32,7 @@ import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
+import javax.lang.model.util.Types;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -64,6 +69,7 @@ public class KenKenPaProcessor extends AbstractProcessor {
 
     private Elements mElementUtils;
     private Filer mFiler;
+    private Types mTypeUtils;
 
     private String mDefaultState;
     Set<String> mStates = new HashSet<>();
@@ -76,6 +82,7 @@ public class KenKenPaProcessor extends AbstractProcessor {
         super.init(env);
 
         mElementUtils = env.getElementUtils();
+        mTypeUtils = env.getTypeUtils();
         mFiler = env.getFiler();
     }
 
@@ -146,17 +153,55 @@ public class KenKenPaProcessor extends AbstractProcessor {
 
     private TypeSpec.Builder createGenerateClassSpec(TypeElement typeElement) {
         return TypeSpec
-                .classBuilder(GENERATE_CLASSNAME_PREFIX + getClassName(typeElement, getPackageName(typeElement)))
+                .classBuilder(generateClassName(typeElement))
                 .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
                 .superclass(ClassName.get(typeElement))
-                .addField(createCurrentStateField().build()).addMethod(createConstructorSpec().build());
+                .addField(createCurrentStateField().build()).addMethods(createConstructorSpec(typeElement));
     }
 
-    private MethodSpec.Builder createConstructorSpec() {
-        return MethodSpec
-                .constructorBuilder()
-                .addModifiers(Modifier.PUBLIC)
-                .addStatement("this.$N = $S", CURRENT_STATE_FIELD_NAME, mDefaultState);
+    private List<MethodSpec> createConstructorSpec(TypeElement typeElement) {
+        List<MethodSpec> constructors = new ArrayList<>();
+        for (Element enclosedElement : typeElement.getEnclosedElements()) {
+            if (enclosedElement.getKind() == ElementKind.CONSTRUCTOR) {
+                MethodSpec.Builder constructorMethodSpec = MethodSpec.constructorBuilder();
+                ExecutableElement executableElement = (ExecutableElement)enclosedElement;
+
+                List<? extends VariableElement> parameters = executableElement.getParameters();
+                if (parameters.size() > 0) {
+                    for (VariableElement parameter : parameters) {
+                        TypeName type = TypeName.get(parameter.asType());
+                        String name = parameter.getSimpleName().toString();
+                        Set<Modifier> parameterModifiers = parameter.getModifiers();
+                        ParameterSpec.Builder parameterBuilder = ParameterSpec.builder(type, name)
+                                .addModifiers(parameterModifiers.toArray(new Modifier[parameterModifiers.size()]));
+                        for (AnnotationMirror mirror : parameter.getAnnotationMirrors()) {
+                            parameterBuilder.addAnnotation(AnnotationSpec.get(mirror));
+                        }
+                        constructorMethodSpec.addParameter(parameterBuilder.build());
+                    }
+
+                    constructorMethodSpec.varargs(executableElement.isVarArgs());
+                }
+
+                for (TypeMirror thrownType : executableElement.getThrownTypes()) {
+                    constructorMethodSpec.addException(TypeName.get(thrownType));
+                }
+
+                constructorMethodSpec = constructorMethodSpec.addStatement("super($L)", createSuperMethodParameterString(
+                        executableElement));
+                constructorMethodSpec.addStatement("this.$N = $S", CURRENT_STATE_FIELD_NAME, mDefaultState);
+                constructors.add(constructorMethodSpec.build());
+            }
+        }
+
+        if (constructors.size() == 0) {
+            MethodSpec.Builder constructorMethodSpec = MethodSpec.constructorBuilder();
+            constructorMethodSpec.addStatement("super()");
+            constructorMethodSpec.addStatement("this.$N = $S", CURRENT_STATE_FIELD_NAME, mDefaultState);
+            constructors.add(constructorMethodSpec.build());
+        }
+
+        return constructors;
     }
 
     private FieldSpec.Builder createCurrentStateField() {
@@ -423,6 +468,10 @@ public class KenKenPaProcessor extends AbstractProcessor {
     private String getPackageName(TypeElement typeElement) {
         return mElementUtils.getPackageOf(typeElement).getQualifiedName()
                 .toString();
+    }
+
+    private String generateClassName(TypeElement typeElement) {
+        return GENERATE_CLASSNAME_PREFIX + getClassName(typeElement, getPackageName(typeElement));
     }
 
     private static String getClassName(TypeElement type, String packageName) {
