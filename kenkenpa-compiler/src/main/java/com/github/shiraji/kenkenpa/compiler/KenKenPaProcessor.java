@@ -131,7 +131,7 @@ public class KenKenPaProcessor extends AbstractProcessor {
 
     private void addGetCurrentStateMethod(TypeSpec.Builder typeSpecBuilder, TypeElement typeElement) {
         for (TypeMirror type : typeElement.getInterfaces()) {
-            if ("com.github.shiraji.annotated.fsm.interfaces.GetCurrentState".equals(type.toString())) {
+            if ("com.github.shiraji.kenkenpa.interfaces.GetCurrentState".equals(type.toString())) {
                 typeSpecBuilder.addMethod(createGetCurrentStateMethod().build());
                 return;
             }
