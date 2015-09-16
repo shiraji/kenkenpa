@@ -32,8 +32,8 @@ android {
 }
 
 dependencies {
-    compile 'com.github.shiraji:kenkenpa:0.0.4'
-    apt 'com.github.shiraji:kenkenpa-compiler:0.0.4'
+    compile 'com.github.shiraji:kenkenpa:0.0.5'
+    apt 'com.github.shiraji:kenkenpa-compiler:0.0.5'
 }
 ```
 
@@ -250,7 +250,7 @@ public abstract class TestSM implements GetCurrentState {
     }
 
     @Land("CIRCLE1")
-    public void land() {
+    public void land(String previousState) {
         System.out.println("land");
     }
 
@@ -270,6 +270,7 @@ public final class KenKenPa_TestSM extends TestSM {
   KenKenPa_TestSM(String text) {
     super(text);
     this.mCurrentState = "CIRCLE1";
+    land(null);
   }
 
   @Override
@@ -302,6 +303,23 @@ public final class KenKenPa_TestSM extends TestSM {
     return mCurrentState;
   }
 
+  private final String takeOff$$fire2() {
+    switch(mCurrentState) {
+      case "CIRCLE1":
+      return "CIRCLE2";
+    }
+    // No definition! Return the default state
+    return "CIRCLE1";
+  }
+
+  private final void land$$fire2(String newState) {
+    switch(newState) {
+      case "CIRCLE1":
+      land(newState);
+      break;
+    }
+  }
+
   private final String takeOff$$fire() {
     switch(mCurrentState) {
       case "CIRCLE1":
@@ -317,30 +335,14 @@ public final class KenKenPa_TestSM extends TestSM {
   private final void land$$fire(String newState) {
     switch(newState) {
       case "CIRCLE1":
-      land();
+      land(newState);
       break;
       case "CIRCLE2":
       break;
     }
   }
-
-  private final String takeOff$$fire2() {
-    switch(mCurrentState) {
-      case "CIRCLE1":
-      return "CIRCLE2";
-    }
-    // No definition! Return the default state
-    return "CIRCLE1";
-  }
-
-  private final void land$$fire2(String newState) {
-    switch(newState) {
-      case "CIRCLE1":
-      land();
-      break;
-    }
-  }
 }
+
 ```
 
 ##TODO
