@@ -47,14 +47,14 @@ Ken-Ken-Pa is a Japanese style of Hop Scotch. The difference between Hop Scotch 
 
 # What does this library do?
 
-When you call a method that has `@Hop(from = "STATE1", to = "STATE2")` annotation, this is an image of execution steps of Ken-Ken-Pa.
+When you call a method that has `@Hop(from = "CIRCLE1", to = "CIRCLE2")` annotation, this is an image of execution steps of Ken-Ken-Pa.
 
 ![execution_image](website/images/execution_image.png)
 
-1. Call `@TakeOff("STATE1")` method if exist
-1. Call the method that has `@Hop(from = "STATE1", to = "STATE2")`
-1. Call `@Land("STATE2")` method if exist
-1. Change the current state to "STATE2"
+1. Call `@TakeOff("CIRCLE1")` method if exist
+1. Call the method that has `@Hop(from = "CIRCLE1", to = "CIRCLE2")`
+1. Call `@Land("CIRCLE2")` method if exist
+1. Change the current state to "CIRCLE2"
 
 # How to use?
 
@@ -63,7 +63,7 @@ There are a few steps to use this library.
 First, add `@KenKenPa` annotation to the abstract class. This abstract class will be a state machine class. `@KenKenPa` annotation needs to have a default state. Currently, states are represented by only String values.
 
 ```java
-@KenKenPa("STATE1")
+@KenKenPa("CIRCLE1")
 public abstract class SimpleFSM {
 }
 ```
@@ -71,7 +71,7 @@ public abstract class SimpleFSM {
 Secondly, create new instance method. The method must return an instance of subclass. The subclass name format is KenKenPa_XXX where XXX is the abstract class name.
 
 ```java
-@KenKenPa("STATE1")
+@KenKenPa("CIRCLE1")
 public abstract class SimpleFSM {
     public static SimpleFSM create() {
         return new KenKenPa_SimpleFSM();
@@ -82,13 +82,13 @@ public abstract class SimpleFSM {
 Thirdly, add `@Hop` to define state changes.
 
 ```java
-@KenKenPa("STATE1")
+@KenKenPa("CIRCLE1")
 public abstract class SimpleFSM {
     public static SimpleFSM create() {
         return new KenKenPa_SimpleFSM();
     }
 
-    @Hop(from = "STATE1", to = "STATE2")
+    @Hop(from = "CIRCLE1", to = "CIRCLE2")
     public void fire() {
       System.out.println("fire!");
     }
@@ -100,7 +100,7 @@ Now, you are set. You can use this class
 
 ```java
 SimpleFSM simpleFSM = SimpleFSM.create();
-simpleFSM.fire(); // => fire! and change current state to STATE2
+simpleFSM.fire(); // => fire! and change current state to CIRCLE2
 ```
 
 ## How to create multiple hops?
@@ -108,14 +108,14 @@ simpleFSM.fire(); // => fire! and change current state to STATE2
 Sadly, there is limitation on Java (less than Java8). You cannot set same annotation on the same method. Instead of using `@Hop`, use `@Hops` which take multiple `@Hop` as parameters.
 
 ```java
-@KenKenPa("STATE1")
+@KenKenPa("CIRCLE1")
 public abstract class SimpleFSM {
     public static SimpleFSM create() {
         return new KenKenPa_SimpleFSM();
     }
 
-    @Hops({@Hop(from = "STATE1", to = "STATE2"),
-            @Hop(from = "STATE2", to = "STATE3")})
+    @Hops({@Hop(from = "CIRCLE1", to = "CIRCLE2"),
+            @Hop(from = "CIRCLE2", to = "CIRCLE3")})
     public void fire() {
       System.out.println("fire!");
     }
@@ -125,7 +125,7 @@ public abstract class SimpleFSM {
 ```java
 SimpleFSM simpleFSM = SimpleFSM.create();
 simpleFSM.fire(); // => fire!
-simpleFSM.fire(); // => fire! and change current state to STATE3
+simpleFSM.fire(); // => fire! and change current state to CIRCLE3
 ```
 
 ## How to get current state?
@@ -133,7 +133,7 @@ simpleFSM.fire(); // => fire! and change current state to STATE3
 To get current state, you can add GetCurrentState interface to the abstract class.
 
 ```java
-@KenKenPa("STATE1")
+@KenKenPa("CIRCLE1")
 public abstract class SimpleFSM implements GetCurrentState
 ```
 
@@ -141,44 +141,44 @@ this interface offers `String getCurrentState()` method.
 
 ```java
 SimpleFSM simpleFSM = SimpleFSM.create();
-simpleFSM.getCurrentState() // => STATE1
+simpleFSM.getCurrentState() // => CIRCLE1
 ```
 
 ## What is `@TakeOff`?
 
-When children hop to another circle, they "take off" the current circle. `@TakeOff` is an annotation that represents "run this method when the current state changed from this state." This annocation is useful when the state require clean up.
+When children hop to another circle, they "take off" the current circle. `@TakeOff` is an annotation that represents "Run this method when the current state changed from this state." This annocation is useful when the state require clean up.
 
 ```java
-@KenKenPa("STATE1")
+@KenKenPa("CIRCLE1")
 public abstract class MainFSM implements GetCurrentState {
     public static MainFSM newInstance() {
         return new KenKenPa_MainFSM();
     }
 
-    @Hop(from = "STATE1", to = "STATE2")
-    public void state1ToState2() {
+    @Hop(from = "CIRCLE1", to = "CIRCLE2")
+    public void circle1ToCircle2() {
     }
 
-    @Hop(from = "STATE1", to = "STATE3")
-    public void state1ToState3() {
+    @Hop(from = "CIRCLE1", to = "CIRCLE3")
+    public void circle1ToCircle3() {
     }
 
-    @Hop(from = "STATE2", to = "STATE1")
-    public void state2ToState1() {
+    @Hop(from = "CIRCLE2", to = "CIRCLE1")
+    public void circle2ToCircle1() {
     }
 
-    @TakeOff("STATE1")
-    void endState1() {
-      System.out.println("Exit from STATE1");
+    @TakeOff("CIRCLE1")
+    void endCircle1() {
+      System.out.println("Exit from CIRCLE1");
     }
 }
 ```
 
 ```java
 SimpleFSM simpleFSM = SimpleFSM.create();
-simpleFSM.state1ToState2(); // => display 'Exit from STATE1'
-simpleFSM.state2ToState1(); // => change current state to STATE1
-simpleFSM.state1ToState3(); // => display 'Exit from STATE1' and change current state to STATE3
+simpleFSM.circle1ToCircle2(); // => display 'Exit from CIRCLE1'
+simpleFSM.circle2ToCircle1(); // => change current state to CIRCLE1
+simpleFSM.circle1ToCircle3(); // => display 'Exit from CIRCLE1' and change current state to CIRCLE3
 ```
 
 Add description for string parameter.
@@ -188,35 +188,35 @@ Add description for string parameter.
 When children hop to another circle, they 'land' the next circle. `@Land` is an annotation that represents "Run this method when the current state became this state." This annotation is useful when the state have the same initialization steps.
 
 ```java
-@KenKenPa("STATE1")
+@KenKenPa("CIRCLE1")
 public abstract class MainFSM implements GetCurrentState {
     public static MainFSM newInstance() {
         return new KenKenPa_MainFSM();
     }
 
-    @Hop(from = "STATE1", to = "STATE2")
-    public void state1ToState2() {
+    @Hop(from = "CIRCLE1", to = "CIRCLE2")
+    public void circle1ToCircle2() {
     }
 
-    @Hop(from = "STATE1", to = "STATE3")
-    public void state1ToState3() {
+    @Hop(from = "CIRCLE1", to = "CIRCLE3")
+    public void circle1ToCircle3() {
     }
 
-    @Hop(from = "STATE2", to = "STATE1")
-    public void state2ToState1() {
+    @Hop(from = "CIRCLE2", to = "CIRCLE1")
+    public void circle2ToCircle1() {
     }
 
-    @Land("STATE2")
-    void startState2() {
-      System.out.println("Now STATE2");
+    @Land("CIRCLE2")
+    void startCircle2() {
+      System.out.println("Now CIRCLE2");
     }
 }
 ```
 
 ```java
 SimpleFSM simpleFSM = SimpleFSM.create();
-simpleFSM.state1ToState2(); // => display 'Now STATE2'
-simpleFSM.state2ToState1(); // => change current state to STATE1
+simpleFSM.circle1ToCircle2(); // => display 'Now CIRCLE2'
+simpleFSM.circle2ToCircle1(); // => change current state to CIRCLE1
 ```
 
 Add description for string parameter.
@@ -226,7 +226,7 @@ Add description for string parameter.
 If the developer create following KenKenPa annotation class
 
 ```java
-@KenKenPa("STATE1")
+@KenKenPa("CIRCLE1")
 public abstract class TestSM implements GetCurrentState {
 
     private String mText;
@@ -239,22 +239,22 @@ public abstract class TestSM implements GetCurrentState {
         return new KenKenPa_TestSM(text);
     }
 
-    @Hops({@Hop(from = "STATE1", to = "STATE2"), @Hop(from = "STATE2", to = "STATE1")})
+    @Hops({@Hop(from = "CIRCLE1", to = "CIRCLE2"), @Hop(from = "CIRCLE2", to = "CIRCLE1")})
     public void fire() {
         System.out.println("Fire!");
     }
 
-    @Hop(from = "STATE1", to = "STATE2")
+    @Hop(from = "CIRCLE1", to = "CIRCLE2")
     public int fire2() {
         return 1;
     }
 
-    @Land("STATE1")
+    @Land("CIRCLE1")
     public void land() {
         System.out.println("land");
     }
 
-    @TakeOff("STATE2")
+    @TakeOff("CIRCLE2")
     public void takeOff() {
         System.out.println("takeoff");
     }
@@ -269,13 +269,13 @@ public final class KenKenPa_TestSM extends TestSM {
 
   KenKenPa_TestSM(String text) {
     super(text);
-    this.mCurrentState = "STATE1";
+    this.mCurrentState = "CIRCLE1";
   }
 
   @Override
   @Hops({
-      @Hop(from = "STATE1", to = "STATE2"),
-      @Hop(from = "STATE2", to = "STATE1")
+      @Hop(from = "CIRCLE1", to = "CIRCLE2"),
+      @Hop(from = "CIRCLE2", to = "CIRCLE1")
   })
   public final void fire() {
     String newState = takeOff$$fire();
@@ -286,8 +286,8 @@ public final class KenKenPa_TestSM extends TestSM {
 
   @Override
   @Hop(
-      from = "STATE1",
-      to = "STATE2"
+      from = "CIRCLE1",
+      to = "CIRCLE2"
   )
   public final int fire2() {
     String newState = takeOff$$fire2();
@@ -304,38 +304,38 @@ public final class KenKenPa_TestSM extends TestSM {
 
   private final String takeOff$$fire() {
     switch(mCurrentState) {
-      case "STATE1":
-      return "STATE2";
-      case "STATE2":
+      case "CIRCLE1":
+      return "CIRCLE2";
+      case "CIRCLE2":
       takeOff();
-      return "STATE1";
+      return "CIRCLE1";
     }
     // No definition! Return the default state
-    return "STATE1";
+    return "CIRCLE1";
   }
 
   private final void land$$fire(String newState) {
     switch(newState) {
-      case "STATE1":
+      case "CIRCLE1":
       land();
       break;
-      case "STATE2":
+      case "CIRCLE2":
       break;
     }
   }
 
   private final String takeOff$$fire2() {
     switch(mCurrentState) {
-      case "STATE1":
-      return "STATE2";
+      case "CIRCLE1":
+      return "CIRCLE2";
     }
     // No definition! Return the default state
-    return "STATE1";
+    return "CIRCLE1";
   }
 
   private final void land$$fire2(String newState) {
     switch(newState) {
-      case "STATE1":
+      case "CIRCLE1":
       land();
       break;
     }
