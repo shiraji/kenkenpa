@@ -1,9 +1,11 @@
 package com.github.shiraji.kenkenpasample;
 
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.os.Handler;
+import android.support.v7.app.ActionBarActivity;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -11,27 +13,51 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-    }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
+        final Handler handler = new Handler();
+        final Button button = (Button)findViewById(R.id.network_launch_button);
+        final Button restartButton = (Button)findViewById(R.id.reset_button);
+        final LoadingSM loadingSM = LoadingSM.create();
+        loadingSM.init();
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        loadingSM.setListener(new LoadingSM.NetworkDoneListener() {
+            @Override
+            public void done() {
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        button.setEnabled(false);
+                        button.setVisibility(View.GONE);
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+                        Toast.makeText(MainActivity.this, "Network loading completed!", Toast.LENGTH_LONG).show();
 
-        return super.onOptionsItemSelected(item);
+                        restartButton.setEnabled(true);
+                        restartButton.setVisibility(View.VISIBLE);
+
+                        loadingSM.close();
+                    }
+                });
+            }
+        });
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadingSM.load();
+            }
+        });
+
+        restartButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                restartButton.setEnabled(false);
+                restartButton.setVisibility(View.GONE);
+
+                button.setEnabled(true);
+                button.setVisibility(View.VISIBLE);
+
+                loadingSM.reset();
+            }
+        });
     }
 }
