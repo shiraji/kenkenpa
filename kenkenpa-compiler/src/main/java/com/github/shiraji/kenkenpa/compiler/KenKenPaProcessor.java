@@ -193,7 +193,7 @@ public class KenKenPaProcessor extends AbstractProcessor {
 
                 if (mLandMap.containsKey(mDefaultState)) {
                     Element defaultLandElement = mLandMap.get(mDefaultState);
-                    addLandMethodCall(constructorMethodSpec, defaultLandElement, "null");
+                    constructorMethodSpec.addStatement("$L", defaultLandElement);
                 }
 
                 constructors.add(constructorMethodSpec.build());
@@ -265,7 +265,7 @@ public class KenKenPaProcessor extends AbstractProcessor {
             return;
         }
 
-        if (!isValidLandMethodParameter(element)) {
+        if (!hasNoParameters(element, Land.class)) {
             return;
         }
 
@@ -277,32 +277,15 @@ public class KenKenPaProcessor extends AbstractProcessor {
         mLandMap.put(land.value(), element);
     }
 
-    private boolean isValidLandMethodParameter(Element element) {
-        return hasNoOrOneStringParameter(element, Land.class);
-    }
-
-    private boolean hasNoOrOneStringParameter(Element element, Class<? extends Annotation> aClass) {
+    private boolean hasNoParameters(Element element, Class<? extends Annotation> aClass) {
         ExecutableElement executableElement = (ExecutableElement) element;
         List<? extends VariableElement> parameters = executableElement.getParameters();
-        if (parameters.size() <= 0) {
-            return true;
-        }
-
-        if (parameters.size() > 1) {
+        if (parameters.size() > 0) {
             logParsingError(element, aClass,
                     new IllegalArgumentException(String.format("%s has too many parameter(s): %s", element.getSimpleName(),
                             parameters.size())));
             return false;
         }
-
-        // this condition looks awful
-        if (!"java.lang.String".equals(parameters.get(0).asType().toString())) {
-            logParsingError(element, aClass,
-                    new IllegalArgumentException(String.format("%s has non-String parameter: %s", element.getSimpleName(),
-                            parameters.get(0).asType())));
-            return false;
-        }
-
         return true;
     }
 
@@ -312,7 +295,7 @@ public class KenKenPaProcessor extends AbstractProcessor {
             return;
         }
 
-        if (!isValidTakeOffMethodParameter(element)) {
+        if (!hasNoParameters(element, TakeOff.class)) {
             return;
         }
 
@@ -322,10 +305,6 @@ public class KenKenPaProcessor extends AbstractProcessor {
                     new IllegalArgumentException(String.format("state %s has multiple @TakeOff", takeOff.value())));
         }
         mTakeOffMap.put(takeOff.value(), element);
-    }
-
-    private boolean isValidTakeOffMethodParameter(Element element) {
-        return hasNoOrOneStringParameter(element, TakeOff.class);
     }
 
     private MethodSpec.Builder createLandMethod(Map.Entry<Element, Annotation> entry) {
@@ -360,7 +339,7 @@ public class KenKenPaProcessor extends AbstractProcessor {
             stateLandMethodSpec.addCode("case $S:\n", hop.from());
             if (mLandMap.containsKey(hop.from())) {
                 Element fromElement = mLandMap.get(hop.from());
-                addLandMethodCall(stateLandMethodSpec, fromElement, "newState");
+                stateLandMethodSpec.addStatement("$L", fromElement);
             }
             stateLandMethodSpec.addStatement("break");
         }
@@ -406,8 +385,7 @@ public class KenKenPaProcessor extends AbstractProcessor {
         boolean hasReturnValue = executableElement.getReturnType().getKind() != TypeKind.VOID;
         hopMethodSpec = addSuperMethodCall(executableElement, hopMethodSpec, hasReturnValue);
 
-        hopMethodSpec.addStatement("$L$L($L)", GENERATE_LAND_METHOD_PREFIX, executableElement.getSimpleName(),
-                CURRENT_STATE_FIELD_NAME)
+        hopMethodSpec.addStatement("$L$L($L)", GENERATE_LAND_METHOD_PREFIX, executableElement.getSimpleName(), "newState")
                 .addStatement("$L = newState", CURRENT_STATE_FIELD_NAME);
 
         if (hasReturnValue) {
