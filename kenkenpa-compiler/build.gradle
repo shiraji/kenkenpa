@@ -9,6 +9,18 @@ dependencies {
     compile 'com.squareup:javapoet:1.2.0'
     compile project(':kenkenpa')
     compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    testCompile 'junit:junit:4.12'
+    testCompile files(org.gradle.internal.jvm.Jvm.current().getToolsJar())
+    testCompile 'com.google.testing.compile:compile-testing:0.6'
+}
+
+sourceSets {
+    test {
+        java {
+            srcDirs = ["src/test/java"]
+        }
+    }
 }
 
 publish {

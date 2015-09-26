@@ -1,15 +1,15 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="com.github.shiraji.kenkenpa.compiler in kenkenpa-compiler" type="JUnit" factoryName="JUnit" nameIsGenerated="true">
+  <configuration default="false" name="UnitTest" type="JUnit" factoryName="JUnit">
     <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
       <pattern>
-        <option name="PATTERN" value="com.github.shiraji.kenkenpa.compiler.*" />
+        <option name="PATTERN" value="com.github.shiraji.kenkenpa.interfaces.*" />
         <option name="ENABLED" value="true" />
       </pattern>
     </extension>
     <module name="kenkenpa-compiler" />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
     <option name="ALTERNATIVE_JRE_PATH" value="" />
-    <option name="PACKAGE_NAME" value="com.github.shiraji.kenkenpa.compiler" />
+    <option name="PACKAGE_NAME" value="com.github.shiraji.kenkenpa" />
     <option name="MAIN_CLASS_NAME" value="" />
     <option name="METHOD_NAME" value="" />
     <option name="TEST_OBJECT" value="package" />
