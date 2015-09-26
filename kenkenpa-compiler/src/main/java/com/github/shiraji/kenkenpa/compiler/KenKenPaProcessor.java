@@ -55,7 +55,7 @@ public class KenKenPaProcessor extends AbstractProcessor {
     private static final String GENERATE_CLASSNAME_PREFIX = "KenKenPa_";
     private static final String GENERATE_TAKEOFF_METHOD_PREFIX = "takeOff$$";
     private static final String GENERATE_LAND_METHOD_PREFIX = "land$$";
-    private static final String CURRENT_STATE_FIELD_NAME = "mCurrentState";
+    private static final String CURRENT_STATE_FIELD_NAME = "$$mCurrentState$$";
 
     @Override
     public Set<String> getSupportedAnnotationTypes() {
