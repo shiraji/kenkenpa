@@ -12,7 +12,7 @@ publish {
     userOrg = 'shiraji'
     groupId = 'com.github.shiraji'
     artifactId = 'kenkenpa'
-    version = '0.0.5'
+    version = '1.0.0'
     description = 'Test version'
     website = 'https://github.com/shiraji/kenkenpa'
     licences = ['Apache-2.0']
