@@ -7,8 +7,6 @@
 
 Yet, another light weight Java FSM library. This library bollows the idea from [Google AutoValue](https://github.com/google/auto/tree/master/value). It generates a subclass that handles states.
 
-This is still alpha version.
-
 # How to install?
 
 Use gradle.
@@ -16,6 +14,7 @@ Use gradle.
 ```gradle
 buildscript {
     repositories {
+      jcenter()
       mavenCentral()
     }
     dependencies {
@@ -32,8 +31,8 @@ android {
 }
 
 dependencies {
-    compile 'com.github.shiraji:kenkenpa:0.0.5'
-    apt 'com.github.shiraji:kenkenpa-compiler:0.0.5'
+    compile 'com.github.shiraji:kenkenpa:1.0.0'
+    apt 'com.github.shiraji:kenkenpa-compiler:1.0.0'
 }
 ```
 
@@ -103,7 +102,7 @@ SimpleFSM simpleFSM = SimpleFSM.create();
 simpleFSM.fire(); // => fire! and change current state to CIRCLE2
 ```
 
-## How to create multiple hops?
+## How to create multiple `@Hop`s?
 
 Sadly, there is limitation on Java (less than Java8). You cannot set same annotation on the same method. Instead of using `@Hop`, use `@Hops` which take multiple `@Hop` as parameters.
 
@@ -146,7 +145,7 @@ simpleFSM.getCurrentState() // => CIRCLE1
 
 ## What is `@TakeOff`?
 
-When children hop to another circle, they "take off" the current circle. `@TakeOff` is an annotation that represents "Run this method when the current state changed from this state." This annocation is useful when the state require clean up.
+When children hop to another circle, they "take off" the current circle. `@TakeOff` is an annotation that represents "Run this method when the current state changed from this state." This annocation is useful when the state require clean up. Annotated method must not have parameters. Also, `void` should be return type. (You can still set return type but you have no way to get the return value)
 
 ```java
 @KenKenPa("CIRCLE1")
@@ -185,7 +184,7 @@ Add description for string parameter.
 
 ## What is `@Land`?
 
-When children hop to another circle, they 'land' the next circle. `@Land` is an annotation that represents "Run this method when the current state became this state." This annotation is useful when the state have the same initialization steps.
+When children hop to another circle, they 'land' the next circle. `@Land` is an annotation that represents "Run this method when the current state became this state." This annotation is useful when the state have the same initialization steps. Annotated method must not have parameters. Also, `void` should be return type. (You can still set return type but you have no way to get the return value)
 
 ```java
 @KenKenPa("CIRCLE1")
@@ -223,7 +222,7 @@ Add description for string parameter.
 
 ## How actually works?
 
-If the developer create following KenKenPa annotation class
+If the developer creates following KenKenPa annotation class
 
 ```java
 @KenKenPa("CIRCLE1")
@@ -250,7 +249,7 @@ public abstract class TestSM implements GetCurrentState {
     }
 
     @Land("CIRCLE1")
-    public void land(String previousState) {
+    public void land() {
         System.out.println("land");
     }
 
@@ -265,12 +264,12 @@ KenKenPa_TestSM is generated at compile time.
 
 ```java
 public final class KenKenPa_TestSM extends TestSM {
-  private String mCurrentState;
+  private String $$mCurrentState$$;
 
   KenKenPa_TestSM(String text) {
     super(text);
-    this.mCurrentState = "CIRCLE1";
-    land(null);
+    this.$$mCurrentState$$ = "CIRCLE1";
+    land();
   }
 
   @Override
@@ -281,8 +280,8 @@ public final class KenKenPa_TestSM extends TestSM {
   public final void fire() {
     String newState = takeOff$$fire();
     super.fire();
-    land$$fire(mCurrentState);
-    mCurrentState = newState;
+    land$$fire(newState);
+    $$mCurrentState$$ = newState;
   }
 
   @Override
@@ -293,18 +292,18 @@ public final class KenKenPa_TestSM extends TestSM {
   public final int fire2() {
     String newState = takeOff$$fire2();
     int returnValue = super.fire2();
-    land$$fire2(mCurrentState);
-    mCurrentState = newState;
+    land$$fire2($$mCurrentState$$);
+    $$mCurrentState$$ = newState;
     return returnValue;
   }
 
   @Override
   public final String getCurrentState() {
-    return mCurrentState;
+    return $$mCurrentState$$;
   }
 
   private final String takeOff$$fire2() {
-    switch(mCurrentState) {
+    switch($$mCurrentState$$) {
       case "CIRCLE1":
       return "CIRCLE2";
     }
@@ -315,13 +314,13 @@ public final class KenKenPa_TestSM extends TestSM {
   private final void land$$fire2(String newState) {
     switch(newState) {
       case "CIRCLE1":
-      land(newState);
+      land();
       break;
     }
   }
 
   private final String takeOff$$fire() {
-    switch(mCurrentState) {
+    switch($$mCurrentState$$) {
       case "CIRCLE1":
       return "CIRCLE2";
       case "CIRCLE2":
@@ -335,7 +334,7 @@ public final class KenKenPa_TestSM extends TestSM {
   private final void land$$fire(String newState) {
     switch(newState) {
       case "CIRCLE1":
-      land(newState);
+      land();
       break;
       case "CIRCLE2":
       break;
@@ -347,22 +346,9 @@ public final class KenKenPa_TestSM extends TestSM {
 
 ##TODO
 
-1. Create unit test
 1. Accept State as an Object other than String
 1. Java6? (this may related to above)
-1. Handling unexpected cases
 1. Sample codes (Android and Java)
-
-## Contributing
-
-Contribution is welcome! You may notice but I am not good English writer. My documentation might confuse this library. Please give me pull request to fix documentation. Raise issue is also welcome. Here is how you can contribute this library.
-
-1. Fork it!
-1. Clone your forked repository: `git clone your-repositity-url`
-1. Create your feature branch: `git checkout -b my-new-feature` (You can skip this step and work on master.)
-1. Commit your changes: `git commit -am 'Add some feature'`
-1. Push to the branch: `git push origin my-new-feature`
-1. Submit a pull request
 
 ## License
 
