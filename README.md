@@ -5,7 +5,7 @@
 * [![Download](https://api.bintray.com/packages/shiraji/maven/kenkenpa/images/download.svg)](https://bintray.com/shiraji/maven/kenkenpa/_latestVersion) : kenkenpa
 * [![Download](https://api.bintray.com/packages/shiraji/maven/kenkenpa-compiler/images/download.svg) ](https://bintray.com/shiraji/maven/kenkenpa-compiler/_latestVersion) : kenkenpa-compiler
 
-Yet, another light weight Java FSM library. This library bollows the idea from [Google AutoValue](https://github.com/google/auto/tree/master/value). It generates a subclass that handles states.
+Yet, another light weight Java FSM library. This library follows the idea from [Google AutoValue](https://github.com/google/auto/tree/master/value). It generates a subclass that handles states.
 
 # How to install?
 
