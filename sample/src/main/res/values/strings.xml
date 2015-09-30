@@ -3,4 +3,12 @@
     <string name="action_settings">Settings</string>
     <string name="call">Call!!!</string>
     <string name="reset">Reset?</string>
+    <string name="title_activity_loading">Loading Activity</string>
+    <string name="title_activity_switch">Switch View Activity</string>
+    <string name="fragment_text_view_first">Fragment1</string>
+    <string name="fragment_text_view_second">Fragment2</string>
+    <string name="fragment_text_view_third">Fragment3</string>
+    <string name="title_activity_navigation">Navigation Activity</string>
+
+    <string name="hello_world">Hello world!</string>
 </resources>

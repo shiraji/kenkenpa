@@ -1,4 +1,4 @@
-package com.github.shiraji.kenkenpasample;
+package com.github.shiraji.kenkenpasample.loading;
 
 import android.util.Log;
 import com.github.shiraji.kenkenpa.annotations.Hop;

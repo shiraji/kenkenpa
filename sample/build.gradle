@@ -24,6 +24,7 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:21.0.3'
+    compile 'com.android.support:recyclerview-v7:21.0.3'
 
     compile project(':kenkenpa')
     apt project(':kenkenpa-compiler')
