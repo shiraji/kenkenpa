@@ -7,22 +7,26 @@ import com.github.shiraji.kenkenpa.annotations.KenKenPa;
 import com.github.shiraji.kenkenpa.annotations.Land;
 import com.github.shiraji.kenkenpasample.R;
 
-@KenKenPa("Fragment1")
-public class SwitchFragmentHelper {
+@KenKenPa(FragmentSwitcher.FRAGMENT1)
+public abstract class FragmentSwitcher {
+    static final String FRAGMENT1 = "Fragment1";
+    static final String FRAGMENT2 = "Fragment2";
+    static final String FRAGMENT3 = "Fragment3";
+
     FragmentManager mFragmentManager;
 
-    public static SwitchFragmentHelper create(FragmentManager fm) {
-        return new KenKenPa_SwitchFragmentHelper(fm);
+    public static FragmentSwitcher create(FragmentManager fm) {
+        return new KenKenPa_FragmentSwitcher(fm);
     }
 
-    public SwitchFragmentHelper(FragmentManager fm) {
+    public FragmentSwitcher(FragmentManager fm) {
         mFragmentManager = fm;
     }
 
     @Hops({
-            @Hop(from = "Fragment1", to = "Fragment2"),
-            @Hop(from = "Fragment2", to = "Fragment3"),
-            @Hop(from = "Fragment3", to = "Fragment1")
+            @Hop(from = FRAGMENT1, to = FRAGMENT2),
+            @Hop(from = FRAGMENT2, to = FRAGMENT3),
+            @Hop(from = FRAGMENT3, to = FRAGMENT1)
     })
     public void switchFragment(FragmentManager fm) {
         mFragmentManager = fm;

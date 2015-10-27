@@ -10,7 +10,7 @@ import com.github.shiraji.kenkenpasample.R;
 
 public class SwitchViewsActivity extends ActionBarActivity {
 
-    SwitchFragmentHelper mSwitchFragmentHelper;
+    FragmentSwitcher mSwitchFragmentHelper;
 
     public static Intent createIntent(Context context) {
         Intent intent = new Intent(context, SwitchViewsActivity.class);
@@ -22,7 +22,7 @@ public class SwitchViewsActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.switch_layout);
 
-        mSwitchFragmentHelper = SwitchFragmentHelper.create(getSupportFragmentManager());
+        mSwitchFragmentHelper = FragmentSwitcher.create(getSupportFragmentManager());
 
         findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
             @Override
