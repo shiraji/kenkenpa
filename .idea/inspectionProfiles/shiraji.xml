@@ -134,33 +134,6 @@
     </inspection_tool>
     <inspection_tool class="PointlessNullCheck" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="ProblematicWhitespace" enabled="true" level="ERROR" enabled_by_default="true" />
-    <inspection_tool class="SSBasedInspection" enabled="true" level="ERROR" enabled_by_default="true">
-      <replaceConfiguration name="Log.eが許されるのは小学生までだよねー" text="Log.e($Parameter$)" recursive="false" caseInsensitive="false" type="JAVA" reformatAccordingToStyle="true" shortenFQN="true" useStaticImport="true" replacement="K3Logger.e($Parameter$)">
-        <constraint name="Instance" minCount="0" within="" contains="" />
-        <constraint name="MethodCall" target="true" within="" contains="" />
-        <constraint name="Parameter" minCount="0" maxCount="2147483647" within="" contains="" />
-      </replaceConfiguration>
-      <replaceConfiguration name="Log.iが許されるのは小学生までだよねー" text="Log.i($Parameter$)" recursive="false" caseInsensitive="false" type="JAVA" reformatAccordingToStyle="true" shortenFQN="true" useStaticImport="true" replacement="K3Logger.i($Parameter$)">
-        <constraint name="Instance" minCount="0" within="" contains="" />
-        <constraint name="MethodCall" target="true" within="" contains="" />
-        <constraint name="Parameter" minCount="0" maxCount="2147483647" within="" contains="" />
-      </replaceConfiguration>
-      <replaceConfiguration name="Log.dが許されるのは小学生までだよねー" text="Log.d($Parameter$)" recursive="false" caseInsensitive="false" type="JAVA" reformatAccordingToStyle="true" shortenFQN="true" useStaticImport="true" replacement="K3Logger.d($Parameter$)">
-        <constraint name="Instance" minCount="0" within="" contains="" />
-        <constraint name="MethodCall" target="true" within="" contains="" />
-        <constraint name="Parameter" minCount="0" maxCount="2147483647" within="" contains="" />
-      </replaceConfiguration>
-      <replaceConfiguration name="Log.vが許されるのは小学生までだよねー" text="Log.v($Parameter$)" recursive="false" caseInsensitive="false" type="JAVA" reformatAccordingToStyle="true" shortenFQN="true" useStaticImport="true" replacement="K3Logger.v($Parameter$)">
-        <constraint name="Instance" minCount="0" within="" contains="" />
-        <constraint name="MethodCall" target="true" within="" contains="" />
-        <constraint name="Parameter" minCount="0" maxCount="2147483647" within="" contains="" />
-      </replaceConfiguration>
-      <replaceConfiguration name="Log.wが許されるのは小学生までだよねー" text="Log.w($Parameter$)" recursive="false" caseInsensitive="false" type="JAVA" reformatAccordingToStyle="true" shortenFQN="true" useStaticImport="true" replacement="K3Logger.w($Parameter$)">
-        <constraint name="Instance" minCount="0" within="" contains="" />
-        <constraint name="MethodCall" target="true" within="" contains="" />
-        <constraint name="Parameter" minCount="0" maxCount="2147483647" within="" contains="" />
-      </replaceConfiguration>
-    </inspection_tool>
     <inspection_tool class="SimplifiableConditionalExpression" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="SimplifiableIfStatement" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="StandardVariableNames" enabled="true" level="WARNING" enabled_by_default="true" />
