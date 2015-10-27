@@ -344,12 +344,6 @@ public final class KenKenPa_TestSM extends TestSM {
 
 ```
 
-##TODO
-
-1. Accept State as an Object other than String
-1. Java6? (this may related to above)
-1. Sample codes (Android and Java)
-
 ## License
 
 ```

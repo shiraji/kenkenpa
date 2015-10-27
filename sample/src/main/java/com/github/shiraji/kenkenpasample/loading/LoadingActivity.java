@@ -1,5 +1,7 @@
-package com.github.shiraji.kenkenpasample;
+package com.github.shiraji.kenkenpasample.loading;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
@@ -7,7 +9,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-public class MainActivity extends ActionBarActivity {
+import com.github.shiraji.kenkenpasample.R;
+
+public class LoadingActivity extends ActionBarActivity {
+
+    public static Intent createIntent(Context context) {
+        Intent intent = new Intent(context, LoadingActivity.class);
+        return intent;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +38,7 @@ public class MainActivity extends ActionBarActivity {
                         button.setEnabled(false);
                         button.setVisibility(View.GONE);
 
-                        Toast.makeText(MainActivity.this, "Network loading completed!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(LoadingActivity.this, "Network loading completed!", Toast.LENGTH_LONG).show();
 
                         restartButton.setEnabled(true);
                         restartButton.setVisibility(View.VISIBLE);
