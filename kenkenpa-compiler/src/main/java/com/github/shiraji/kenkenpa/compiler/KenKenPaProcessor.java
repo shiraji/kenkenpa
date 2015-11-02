@@ -335,13 +335,19 @@ public class KenKenPaProcessor extends AbstractProcessor {
                 .addParameter(String.class, "newState");
 
         stateLandMethodSpec.beginControlFlow("switch($L)", "newState");
+        Set<String> handledLandStateSet = new HashSet<>();
         for (Hop hop : hops) {
+            if (handledLandStateSet.contains(hop.to())) {
+                continue;
+            }
+
             stateLandMethodSpec.addCode("case $S:\n", hop.to());
             if (mLandMap.containsKey(hop.to())) {
                 Element fromElement = mLandMap.get(hop.to());
                 stateLandMethodSpec.addStatement("$L", fromElement);
             }
             stateLandMethodSpec.addStatement("break");
+            handledLandStateSet.add(hop.to());
         }
         stateLandMethodSpec.endControlFlow();
         return stateLandMethodSpec;
