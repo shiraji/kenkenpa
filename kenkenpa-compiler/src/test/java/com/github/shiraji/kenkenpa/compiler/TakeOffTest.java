@@ -68,7 +68,7 @@ public class TakeOffTest extends TestCase {
             "  }",
             "  private final void land$$fire(String newState) {",
             "    switch(newState) {",
-            "      case \"CIRCLE2\":",
+            "      case \"CIRCLE1\":",
             "      break;",
             "    }",
             "  }",
@@ -80,7 +80,7 @@ public class TakeOffTest extends TestCase {
     }
 
     @Test
-    public void landMethodShouldHaveNoParameters() {
+    public void takeOffMethodShouldHaveNoParameters() {
         // @formatter:off
         JavaFileObject source = JavaFileObjects.forSourceString("test.SimpleFSM", Joiner.on('\n').join(
             "package test;",
