@@ -27,8 +27,8 @@ publish {
     userOrg = 'shiraji'
     groupId = 'com.github.shiraji'
     artifactId = 'kenkenpa-compiler'
-    version = '1.0.0'
-    description = 'Test version'
+    version = '1.0.1'
+    description = 'Fixed a critical issue with @Land'
     website = 'https://github.com/shiraji/kenkenpa'
     licences = ['Apache-2.0']
 }
