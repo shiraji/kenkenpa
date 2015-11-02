@@ -92,7 +92,7 @@ public class KenKenPaProcessor extends AbstractProcessor {
                            RoundEnvironment roundEnv) {
         Set<? extends Element> elements = roundEnv.getElementsAnnotatedWith(KenKenPa.class);
         for (Element element : elements) {
-            TypeElement typeElement = (TypeElement) element;
+            TypeElement typeElement = (TypeElement)element;
             setDefaultStateFromTypeElement(typeElement);
             TypeSpec.Builder typeSpecBuilder = createClassTypeSpec(typeElement);
             writeJavaFile(typeElement, typeSpecBuilder);
@@ -164,7 +164,7 @@ public class KenKenPaProcessor extends AbstractProcessor {
         for (Element enclosedElement : typeElement.getEnclosedElements()) {
             if (enclosedElement.getKind() == ElementKind.CONSTRUCTOR) {
                 MethodSpec.Builder constructorMethodSpec = MethodSpec.constructorBuilder();
-                ExecutableElement executableElement = (ExecutableElement) enclosedElement;
+                ExecutableElement executableElement = (ExecutableElement)enclosedElement;
 
                 List<? extends VariableElement> parameters = executableElement.getParameters();
                 if (parameters.size() > 0) {
@@ -244,7 +244,7 @@ public class KenKenPaProcessor extends AbstractProcessor {
         mStates.add(hop.from());
         mStates.add(hop.to());
         mHopMap.put(element2, hop);
-        MethodSpec.Builder hopMethod = createHopMethod((ExecutableElement) element2);
+        MethodSpec.Builder hopMethod = createHopMethod((ExecutableElement)element2);
         typeSpecBuilder.addMethod(hopMethod.build());
     }
 
@@ -255,7 +255,7 @@ public class KenKenPaProcessor extends AbstractProcessor {
         }
         addHopsToStates(element2, hops);
         mHopMap.put(element2, hops);
-        MethodSpec.Builder hopMethod = createHopMethod((ExecutableElement) element2);
+        MethodSpec.Builder hopMethod = createHopMethod((ExecutableElement)element2);
         typeSpecBuilder.addMethod(hopMethod.build());
     }
 
@@ -278,7 +278,7 @@ public class KenKenPaProcessor extends AbstractProcessor {
     }
 
     private boolean hasNoParameters(Element element, Class<? extends Annotation> aClass) {
-        ExecutableElement executableElement = (ExecutableElement) element;
+        ExecutableElement executableElement = (ExecutableElement)element;
         List<? extends VariableElement> parameters = executableElement.getParameters();
         if (parameters.size() > 0) {
             logParsingError(element, aClass,
@@ -320,9 +320,9 @@ public class KenKenPaProcessor extends AbstractProcessor {
     private List<Hop> createHopListFromEntry(Annotation annotation) {
         List<Hop> hopList = new LinkedList<>();
         if (annotation instanceof Hop) {
-            hopList.add((Hop) annotation);
+            hopList.add((Hop)annotation);
         } else if (annotation instanceof Hops) {
-            Hops hops = (Hops) annotation;
+            Hops hops = (Hops)annotation;
             hopList.addAll(Arrays.asList(hops.value()));
         }
         return hopList;
@@ -336,9 +336,9 @@ public class KenKenPaProcessor extends AbstractProcessor {
 
         stateLandMethodSpec.beginControlFlow("switch($L)", "newState");
         for (Hop hop : hops) {
-            stateLandMethodSpec.addCode("case $S:\n", hop.from());
-            if (mLandMap.containsKey(hop.from())) {
-                Element fromElement = mLandMap.get(hop.from());
+            stateLandMethodSpec.addCode("case $S:\n", hop.to());
+            if (mLandMap.containsKey(hop.to())) {
+                Element fromElement = mLandMap.get(hop.to());
                 stateLandMethodSpec.addStatement("$L", fromElement);
             }
             stateLandMethodSpec.addStatement("break");
