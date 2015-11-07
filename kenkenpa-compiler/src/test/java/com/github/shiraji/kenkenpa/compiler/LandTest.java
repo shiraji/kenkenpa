@@ -167,4 +167,28 @@ public class LandTest extends TestCase {
 
         compileShouldFail(source);
     }
+
+    @Test
+    public void landMethodStateShouldBeDefaultStateOrToState() {
+        // @formatter:off
+        JavaFileObject source = JavaFileObjects.forSourceString("test.SimpleFSM", Joiner.on('\n').join(
+            "package test;",
+            "import com.github.shiraji.kenkenpa.annotations.Hop;",
+            "import com.github.shiraji.kenkenpa.annotations.KenKenPa;",
+            "import com.github.shiraji.kenkenpa.annotations.Land;",
+            "@KenKenPa(\"CIRCLE1\")",
+            "public abstract class SimpleFSM {",
+            "    @Hop(from = \"CIRCLE2\", to = \"CIRCLE1\")",
+            "    public void fire() {",
+            "      System.out.println(\"fire!\");",
+            "    }",
+            "    @Land(\"CIRCLE2\")",
+            "    public void land() {",
+            "    }",
+            "}"
+        ));
+        // @formatter:on
+
+        compileShouldFail(source);
+    }
 }
