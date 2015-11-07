@@ -145,7 +145,7 @@ simpleFSM.getCurrentState() // => CIRCLE1
 
 ## What is `@TakeOff`?
 
-When children hop to another circle, they "take off" the current circle. `@TakeOff` is an annotation that represents "Run this method when the current state changed from this state." This annocation is useful when the state require clean up. Annotated method must not have parameters. Also, `void` should be return type. (You can still set return type but you have no way to get the return value)
+When children hop to another circle, they "take off" the current circle. `@TakeOff` is an annotation that represents "Run this method when the current state changed from this state." This annocation is useful when the state require clean up. Annotated method must not have parameters. A state of `@TakeOff` should be at least one state that defines at `@Hop`'s `from` parameter. Also, `void` should be return type. (You can still set return type but you have no way to get the return value)
 
 ```java
 @KenKenPa("CIRCLE1")
@@ -184,7 +184,7 @@ Add description for string parameter.
 
 ## What is `@Land`?
 
-When children hop to another circle, they 'land' the next circle. `@Land` is an annotation that represents "Run this method when the current state became this state." This annotation is useful when the state have the same initialization steps. Annotated method must not have parameters. Also, `void` should be return type. (You can still set return type but you have no way to get the return value)
+When children hop to another circle, they 'land' the next circle. `@Land` is an annotation that represents "Run this method when the current state became this state." This annotation is useful when the state have the same initialization steps. Annotated method must not have parameters. A state of `@Land` should be the default state or at least one state that defines at `@Hop`'s `to` parameter. Also, `void` should be return type. (You can still set return type but you have no way to get the return value)
 
 ```java
 @KenKenPa("CIRCLE1")
