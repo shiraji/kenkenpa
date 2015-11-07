@@ -302,6 +302,12 @@ public class KenKenPaProcessor extends AbstractProcessor {
             logParsingError(element, Land.class,
                     new IllegalArgumentException(String.format("state %s has multiple @Land", land.value())));
         }
+
+        if(!mDefaultState.equals(land.value()) && !hasToState(land.value())) {
+            logParsingError(element, Land.class,
+                    new IllegalArgumentException(String.format("No state %s set Hop(to)", land.value())));
+        }
+
         mLandMap.put(land.value(), element);
     }
 
@@ -332,6 +338,12 @@ public class KenKenPaProcessor extends AbstractProcessor {
             logParsingError(element, TakeOff.class,
                     new IllegalArgumentException(String.format("state %s has multiple @TakeOff", takeOff.value())));
         }
+
+        if(!hasFromState(takeOff.value())) {
+            logParsingError(element, TakeOff.class,
+                    new IllegalArgumentException(String.format("No state %s set Hop(from)", takeOff.value())));
+        }
+
         mTakeOffMap.put(takeOff.value(), element);
     }
 
