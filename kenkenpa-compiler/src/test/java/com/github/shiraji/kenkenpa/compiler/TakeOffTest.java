@@ -102,4 +102,28 @@ public class TakeOffTest extends TestCase {
 
         compileShouldFail(source);
     }
+
+    @Test
+    public void takeOffMethodStateShouldBeFromState() {
+        // @formatter:off
+        JavaFileObject source = JavaFileObjects.forSourceString("test.SimpleFSM", Joiner.on('\n').join(
+            "package test;",
+            "import com.github.shiraji.kenkenpa.annotations.Hop;",
+            "import com.github.shiraji.kenkenpa.annotations.KenKenPa;",
+            "import com.github.shiraji.kenkenpa.annotations.TakeOff;",
+            "@KenKenPa(\"CIRCLE1\")",
+            "public abstract class SimpleFSM {",
+            "    @Hop(from = \"CIRCLE1\", to = \"CIRCLE2\")",
+            "    public void fire() {",
+            "      System.out.println(\"fire!\");",
+            "    }",
+            "    @TakeOff(\"CIRCLE2\")",
+            "    public void land() {",
+            "    }",
+            "}"
+        ));
+        // @formatter:on
+
+        compileShouldFail(source);
+    }
 }

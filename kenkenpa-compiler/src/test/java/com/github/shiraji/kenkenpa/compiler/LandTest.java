@@ -90,7 +90,7 @@ public class LandTest extends TestCase {
             "import com.github.shiraji.kenkenpa.annotations.Land;",
             "@KenKenPa(\"CIRCLE1\")",
             "public abstract class SimpleFSM {",
-            "    @Hop(from = \"CIRCLE2\", to = \"CIRCLE1\")",
+            "    @Hop(from = \"CIRCLE1\", to = \"CIRCLE2\")",
             "    public void fire() {",
             "      System.out.println(\"fire!\");",
             "    }",
@@ -114,8 +114,8 @@ public class LandTest extends TestCase {
             "  }",
             "  @Override",
             "  @Hop(",
-            "      from = \"CIRCLE2\",",
-            "      to = \"CIRCLE1\"",
+            "      from = \"CIRCLE1\",",
+            "      to = \"CIRCLE2\"",
             "  )",
             "  public final void fire() {",
             "    String newState = takeOff$$fire();",
@@ -125,16 +125,15 @@ public class LandTest extends TestCase {
             "  }",
             "  private final String takeOff$$fire() {",
             "    switch($$mCurrentState$$) {",
-            "      case \"CIRCLE2\":",
-            "      return \"CIRCLE1\";",
+            "      case \"CIRCLE1\":",
+            "      return \"CIRCLE2\";",
             "    }",
             "    // No definition! Return the default state",
             "    return \"CIRCLE1\";",
             "  }",
             "  private final void land$$fire(String newState) {",
             "    switch(newState) {",
-            "      case \"CIRCLE1\":",
-            "      land();",
+            "      case \"CIRCLE2\":",
             "      break;",
             "    }",
             "  }",
@@ -161,6 +160,30 @@ public class LandTest extends TestCase {
             "    }",
             "    @Land(\"CIRCLE1\")",
             "    public void land(String previousState) {",
+            "    }",
+            "}"
+        ));
+        // @formatter:on
+
+        compileShouldFail(source);
+    }
+
+    @Test
+    public void landMethodStateShouldBeDefaultStateOrToState() {
+        // @formatter:off
+        JavaFileObject source = JavaFileObjects.forSourceString("test.SimpleFSM", Joiner.on('\n').join(
+            "package test;",
+            "import com.github.shiraji.kenkenpa.annotations.Hop;",
+            "import com.github.shiraji.kenkenpa.annotations.KenKenPa;",
+            "import com.github.shiraji.kenkenpa.annotations.Land;",
+            "@KenKenPa(\"CIRCLE1\")",
+            "public abstract class SimpleFSM {",
+            "    @Hop(from = \"CIRCLE2\", to = \"CIRCLE1\")",
+            "    public void fire() {",
+            "      System.out.println(\"fire!\");",
+            "    }",
+            "    @Land(\"CIRCLE2\")",
+            "    public void land() {",
             "    }",
             "}"
         ));
