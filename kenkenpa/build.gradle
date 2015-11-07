@@ -12,8 +12,8 @@ publish {
     userOrg = 'shiraji'
     groupId = 'com.github.shiraji'
     artifactId = 'kenkenpa'
-    version = '1.0.1'
-    description = 'Fixed a critical issue with @Land'
+    version = '1.0.2'
+    description = 'Added validation to @Land/@TakeOff'
     website = 'https://github.com/shiraji/kenkenpa'
     licences = ['Apache-2.0']
 }
