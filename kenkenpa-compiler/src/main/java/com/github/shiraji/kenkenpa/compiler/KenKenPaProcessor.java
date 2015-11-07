@@ -101,6 +101,34 @@ public class KenKenPaProcessor extends AbstractProcessor {
         return true;
     }
 
+    private boolean hasFromState(String stateName) {
+        List<Hop> hops = new LinkedList<>();
+        for (Map.Entry<Element, Annotation> entry : mHopMap.entrySet()) {
+            hops.addAll(createHopListFromEntry(entry.getValue()));
+        }
+
+        List<String> hopFromStates = new ArrayList<>();
+        for (Hop hop : hops) {
+            hopFromStates.add(hop.from());
+        }
+
+        return hopFromStates.contains(stateName);
+    }
+
+    private boolean hasToState(String stateName) {
+        List<Hop> hops = new LinkedList<>();
+        for (Map.Entry<Element, Annotation> entry : mHopMap.entrySet()) {
+            hops.addAll(createHopListFromEntry(entry.getValue()));
+        }
+
+        List<String> hopToStates = new ArrayList<>();
+        for (Hop hop : hops) {
+            hopToStates.add(hop.to());
+        }
+
+        return hopToStates.contains(stateName);
+    }
+
     private void setDefaultStateFromTypeElement(TypeElement typeElement) {
         KenKenPa annotation = typeElement.getAnnotation(KenKenPa.class);
         mDefaultState = annotation.value();
