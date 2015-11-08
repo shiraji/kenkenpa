@@ -1,8 +1,6 @@
 # Ken-Ken-Pa
 
-[![Join the chat at https://gitter.im/shiraji/kenkenpa](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/shiraji/kenkenpa?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
-[![Build Status](https://secure.travis-ci.org/shiraji/kenkenpa.png)](http://travis-ci.org/shiraji/kenkenpa)  [![Software License](https://img.shields.io/badge/license-Apache%202.0-brightgreen.svg)](https://github.com/shiraji/kenkenpa/blob/master/LICENSE)
+[![Build Status](https://secure.travis-ci.org/shiraji/kenkenpa.png)](http://travis-ci.org/shiraji/kenkenpa)  [![Software License](https://img.shields.io/badge/license-Apache%202.0-brightgreen.svg)](https://github.com/shiraji/kenkenpa/blob/master/LICENSE) [![Join the chat at https://gitter.im/shiraji/kenkenpa](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/shiraji/kenkenpa?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 * [![Download](https://api.bintray.com/packages/shiraji/maven/kenkenpa/images/download.svg)](https://bintray.com/shiraji/maven/kenkenpa/_latestVersion) : kenkenpa
 * [![Download](https://api.bintray.com/packages/shiraji/maven/kenkenpa-compiler/images/download.svg) ](https://bintray.com/shiraji/maven/kenkenpa-compiler/_latestVersion) : kenkenpa-compiler
