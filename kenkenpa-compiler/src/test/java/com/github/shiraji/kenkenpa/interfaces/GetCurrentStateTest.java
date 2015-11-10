@@ -21,7 +21,7 @@ public class GetCurrentStateTest extends TestCase {
             "package test;",
             "import com.github.shiraji.kenkenpa.annotations.KenKenPa;",
             "import com.github.shiraji.kenkenpa.interfaces.GetCurrentState;",
-            "@KenKenPa(\"CIRCLE1\")",
+            "@KenKenPa(defaultState = \"CIRCLE1\")",
             "public abstract class SimpleFSM implements GetCurrentState {",
             "}"
         ));

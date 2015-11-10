@@ -20,7 +20,7 @@ public class KenKenPaTest extends TestCase {
         JavaFileObject source = JavaFileObjects.forSourceString("test.SimpleFSM", Joiner.on('\n').join(
             "package test;",
             "import com.github.shiraji.kenkenpa.annotations.KenKenPa;",
-            "@KenKenPa(\"CIRCLE1\")",
+            "@KenKenPa(defaultState = \"CIRCLE1\")",
             "public abstract class SimpleFSM {",
             "}"
         ));
@@ -46,7 +46,7 @@ public class KenKenPaTest extends TestCase {
         JavaFileObject source = JavaFileObjects.forSourceString("test.SimpleFSM", Joiner.on('\n').join(
             "package test;",
             "import com.github.shiraji.kenkenpa.annotations.KenKenPa;",
-            "@KenKenPa(\"CIRCLE1\")",
+            "@KenKenPa(defaultState = \"CIRCLE1\")",
             "public abstract class SimpleFSM {",
             "    private String mCurrentState;",
             "    private int mInt;",
