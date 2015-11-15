@@ -145,9 +145,31 @@ public class KenKenPaProcessor extends AbstractProcessor {
             addLandAnnotationInfo(enclosedElement);
             addTakeOffAnnotationInfo(enclosedElement);
         }
+
+        validateLandAnnotation();
+        validateTakeOffAnnotation();
+
         addGetCurrentStateMethod(typeSpecBuilder, typeElement);
         addGenerateMethods(typeSpecBuilder, typeElement);
         return typeSpecBuilder;
+    }
+
+    private void validateTakeOffAnnotation() {
+        for (Map.Entry<String, Element> entry : mTakeOffMap.entrySet()) {
+            if (!hasFromState(entry.getKey())) {
+                logParsingError(entry.getValue(), TakeOff.class,
+                        new IllegalArgumentException(String.format("No state %s set Hop(from)", entry.getKey())));
+            }
+        }
+    }
+
+    private void validateLandAnnotation() {
+        for (Map.Entry<String, Element> entry : mLandMap.entrySet()) {
+            if (!mDefaultState.equals(entry.getKey()) && !hasToState(entry.getKey())) {
+                logParsingError(entry.getValue(), Land.class,
+                        new IllegalArgumentException(String.format("No state %s set Hop(to)", entry.getKey())));
+            }
+        }
     }
 
     private void clearData() {
@@ -302,12 +324,6 @@ public class KenKenPaProcessor extends AbstractProcessor {
             logParsingError(element, Land.class,
                     new IllegalArgumentException(String.format("state %s has multiple @Land", land.value())));
         }
-
-        if(!mDefaultState.equals(land.value()) && !hasToState(land.value())) {
-            logParsingError(element, Land.class,
-                    new IllegalArgumentException(String.format("No state %s set Hop(to)", land.value())));
-        }
-
         mLandMap.put(land.value(), element);
     }
 
@@ -338,12 +354,6 @@ public class KenKenPaProcessor extends AbstractProcessor {
             logParsingError(element, TakeOff.class,
                     new IllegalArgumentException(String.format("state %s has multiple @TakeOff", takeOff.value())));
         }
-
-        if(!hasFromState(takeOff.value())) {
-            logParsingError(element, TakeOff.class,
-                    new IllegalArgumentException(String.format("No state %s set Hop(from)", takeOff.value())));
-        }
-
         mTakeOffMap.put(takeOff.value(), element);
     }
 
