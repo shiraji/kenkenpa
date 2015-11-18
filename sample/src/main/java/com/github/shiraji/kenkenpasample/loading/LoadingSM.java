@@ -16,7 +16,7 @@ import com.github.shiraji.kenkenpa.annotations.TakeOff;
  * </ul>
  * The interesting point is the developer does not require to have "isLoading" flag.
  */
-@KenKenPa("INIT")
+@KenKenPa(defaultState = "INIT")
 public abstract class LoadingSM {
 
     public static LoadingSM create() {

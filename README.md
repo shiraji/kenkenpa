@@ -62,7 +62,7 @@ There are a few steps to use this library.
 First, add `@KenKenPa` annotation to the abstract class. This abstract class will be a state machine class. `@KenKenPa` annotation needs to have a default state. Currently, states are represented by only String values.
 
 ```java
-@KenKenPa("CIRCLE1")
+@KenKenPa(defaultState = "CIRCLE1")
 public abstract class SimpleFSM {
 }
 ```
@@ -70,7 +70,7 @@ public abstract class SimpleFSM {
 Secondly, create new instance method. The method must return an instance of subclass. The subclass name format is KenKenPa_XXX where XXX is the abstract class name.
 
 ```java
-@KenKenPa("CIRCLE1")
+@KenKenPa(defaultState = "CIRCLE1")
 public abstract class SimpleFSM {
     public static SimpleFSM create() {
         return new KenKenPa_SimpleFSM();
@@ -81,7 +81,7 @@ public abstract class SimpleFSM {
 Thirdly, add `@Hop` to define state changes.
 
 ```java
-@KenKenPa("CIRCLE1")
+@KenKenPa(defaultState = "CIRCLE1")
 public abstract class SimpleFSM {
     public static SimpleFSM create() {
         return new KenKenPa_SimpleFSM();
@@ -107,7 +107,7 @@ simpleFSM.fire(); // => fire! and change current state to CIRCLE2
 Sadly, there is limitation on Java (less than Java8). You cannot set same annotation on the same method. Instead of using `@Hop`, use `@Hops` which take multiple `@Hop` as parameters.
 
 ```java
-@KenKenPa("CIRCLE1")
+@KenKenPa(defaultState = "CIRCLE1")
 public abstract class SimpleFSM {
     public static SimpleFSM create() {
         return new KenKenPa_SimpleFSM();
@@ -132,7 +132,7 @@ simpleFSM.fire(); // => fire! and change current state to CIRCLE3
 To get current state, you can add GetCurrentState interface to the abstract class.
 
 ```java
-@KenKenPa("CIRCLE1")
+@KenKenPa(defaultState = "CIRCLE1")
 public abstract class SimpleFSM implements GetCurrentState
 ```
 
@@ -148,7 +148,7 @@ simpleFSM.getCurrentState() // => CIRCLE1
 When children hop to another circle, they "take off" the current circle. `@TakeOff` is an annotation that represents "Run this method when the current state changed from this state." This annocation is useful when the state require clean up. Annotated method must not have parameters. A state of `@TakeOff` should be at least one state that defines at `@Hop`'s `from` parameter. Also, `void` should be return type. (You can still set return type but you have no way to get the return value)
 
 ```java
-@KenKenPa("CIRCLE1")
+@KenKenPa(defaultState = "CIRCLE1")
 public abstract class MainFSM implements GetCurrentState {
     public static MainFSM newInstance() {
         return new KenKenPa_MainFSM();
@@ -187,7 +187,7 @@ Add description for string parameter.
 When children hop to another circle, they 'land' the next circle. `@Land` is an annotation that represents "Run this method when the current state became this state." This annotation is useful when the state have the same initialization steps. Annotated method must not have parameters. A state of `@Land` should be the default state or at least one state that defines at `@Hop`'s `to` parameter. Also, `void` should be return type. (You can still set return type but you have no way to get the return value)
 
 ```java
-@KenKenPa("CIRCLE1")
+@KenKenPa(defaultState = "CIRCLE1")
 public abstract class MainFSM implements GetCurrentState {
     public static MainFSM newInstance() {
         return new KenKenPa_MainFSM();
@@ -225,7 +225,7 @@ Add description for string parameter.
 If the developer creates following KenKenPa annotation class
 
 ```java
-@KenKenPa("CIRCLE1")
+@KenKenPa(defaultState = "CIRCLE1")
 public abstract class TestSM implements GetCurrentState {
 
     private String mText;

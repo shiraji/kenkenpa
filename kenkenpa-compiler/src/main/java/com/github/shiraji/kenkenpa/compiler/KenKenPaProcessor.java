@@ -73,6 +73,7 @@ public class KenKenPaProcessor extends AbstractProcessor {
     private Types mTypeUtils;
 
     private String mDefaultState;
+    private boolean mIsLandFirst;
     Set<String> mStates = new HashSet<>();
     Map<String, Element> mLandMap = new HashMap<>();
     Map<String, Element> mTakeOffMap = new HashMap<>();
@@ -131,7 +132,8 @@ public class KenKenPaProcessor extends AbstractProcessor {
 
     private void setDefaultStateFromTypeElement(TypeElement typeElement) {
         KenKenPa annotation = typeElement.getAnnotation(KenKenPa.class);
-        mDefaultState = annotation.value();
+        mDefaultState = annotation.defaultState();
+        mIsLandFirst = annotation.isLandFirst();
     }
 
     private TypeSpec.Builder createClassTypeSpec(TypeElement typeElement) {
@@ -241,7 +243,7 @@ public class KenKenPaProcessor extends AbstractProcessor {
                         executableElement));
                 constructorMethodSpec.addStatement("this.$N = $S", CURRENT_STATE_FIELD_NAME, mDefaultState);
 
-                if (mLandMap.containsKey(mDefaultState)) {
+                if (mIsLandFirst && mLandMap.containsKey(mDefaultState)) {
                     Element defaultLandElement = mLandMap.get(mDefaultState);
                     constructorMethodSpec.addStatement("$L", defaultLandElement);
                 }
