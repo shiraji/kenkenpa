@@ -1,5 +1,6 @@
 apply plugin: 'java'
 apply plugin: 'bintray-release'
+apply from: 'https://raw.githubusercontent.com/shiraji/gradle-scripts/master/maven-local-publish-jar.gradle'
 
 targetCompatibility = JavaVersion.VERSION_1_7
 sourceCompatibility = JavaVersion.VERSION_1_7
@@ -25,9 +26,9 @@ sourceSets {
 
 publish {
     userOrg = 'shiraji'
-    groupId = 'com.github.shiraji'
-    artifactId = 'kenkenpa-compiler'
-    version = '2.0.0-SNAPSHOT'
+    groupId = GROUP
+    artifactId = ARTIFACTID
+    version = VERSION
     description = 'Added validation to @Land/@TakeOff'
     website = 'https://github.com/shiraji/kenkenpa'
     licences = ['Apache-2.0']
