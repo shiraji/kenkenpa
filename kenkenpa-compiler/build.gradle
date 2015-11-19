@@ -26,7 +26,7 @@ sourceSets {
 
 publish {
     userOrg = 'shiraji'
-    groupId = GROUP
+    groupId = GROUPID
     artifactId = ARTIFACTID
     version = VERSION
     description = 'Added validation to @Land/@TakeOff'
