@@ -1,6 +1,5 @@
 apply plugin: 'java'
 apply plugin: 'bintray-release'
-apply from: 'https://raw.githubusercontent.com/shiraji/gradle-scripts/master/maven-local-publish-jar.gradle'
 
 targetCompatibility = JavaVersion.VERSION_1_7
 sourceCompatibility = JavaVersion.VERSION_1_7
