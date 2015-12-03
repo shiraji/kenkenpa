@@ -31,7 +31,7 @@ android {
 }
 
 dependencies {
-    compile 'com.github.shiraji:kenkenpa:1.0.3'
+    provided 'com.github.shiraji:kenkenpa:1.0.3'
     apt 'com.github.shiraji:kenkenpa-compiler:1.0.3'
 }
 ```
