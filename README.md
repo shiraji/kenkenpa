@@ -40,6 +40,12 @@ dependencies {
 
 If you cannot use gradle, then download jar from Download button on top of the documentation.
 
+# How to install develop version?
+
+Please refer [jitpack.io](https://jitpack.io/#shiraji/kenkenpa)
+
+If you do not find right version, please leave a message on gitter.
+
 # What is Ken-Ken-Pa?
 
 Ken-Ken-Pa is a Japanese style of Hop Scotch. The difference between Hop Scotch and Ken-Ken-Pa is whether they use squares or circles.
