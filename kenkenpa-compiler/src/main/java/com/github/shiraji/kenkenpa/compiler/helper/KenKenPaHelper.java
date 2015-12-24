@@ -17,11 +17,11 @@ public class KenKenPaHelper {
                                  Class<? extends Annotation> annotation, Exception e) {
         StringWriter stackTrace = new StringWriter();
         e.printStackTrace(new PrintWriter(stackTrace));
-        error(processingEnv, element, "Unable to parse @%s.\n\n%s",
+        printError(processingEnv, element, "Unable to parse @%s.\n\n%s",
                 annotation.getSimpleName(), stackTrace);
     }
 
-    private static void error(ProcessingEnvironment processingEnv,Element element, String message, Object... args) {
+    private static void printError(ProcessingEnvironment processingEnv, Element element, String message, Object... args) {
         if (args.length > 0) {
             message = String.format(message, args);
         }
