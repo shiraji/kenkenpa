@@ -1,15 +1,17 @@
 package com.github.shiraji.kenkenpa.interfaces;
 
-import com.google.common.base.Joiner;
-import com.google.testing.compile.JavaFileObjects;
+import static com.github.shiraji.kenkenpa.compiler.KenKenPaTestHelper.compareSourceCodesWithoutError;
+
+import javax.tools.JavaFileObject;
+
 import junit.framework.TestCase;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import javax.tools.JavaFileObject;
-
-import static com.github.shiraji.kenkenpa.compiler.KenKenPaTestHelper.compareSourceCodesWithoutError;
+import com.google.common.base.Joiner;
+import com.google.testing.compile.JavaFileObjects;
 
 @RunWith(JUnit4.class)
 public class GetCurrentStateTest extends TestCase {

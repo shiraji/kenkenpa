@@ -1,4 +1,7 @@
+import org.gradle.internal.jvm.Jvm
+
 apply plugin: 'java'
+apply plugin: 'kotlin'
 apply plugin: 'bintray-release'
 
 targetCompatibility = JavaVersion.VERSION_1_7
@@ -11,17 +14,24 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
     testCompile 'junit:junit:4.12'
-    testCompile files(org.gradle.internal.jvm.Jvm.current().getToolsJar())
+    testCompile files(Jvm.current().getToolsJar())
     testCompile 'com.google.testing.compile:compile-testing:0.6'
+    compile "org.jetbrains.kotlin:kotlin-stdlib:1.0.0-beta-4584"
+    compile "org.jetbrains.kotlin:kotlin-reflect:1.0.0-beta-4584"
 }
 
-sourceSets {
-    test {
-        java {
-            srcDirs = ["src/test/java"]
-        }
-    }
-}
+//sourceSets {
+//    test {
+//        java {
+//            srcDirs = ["src/test/java"]
+//        }
+//        resources {
+//            srcDirs = [
+//                    'src/main/resources'
+//            ]
+//        }
+//    }
+//}
 
 publish {
     userOrg = 'shiraji'
