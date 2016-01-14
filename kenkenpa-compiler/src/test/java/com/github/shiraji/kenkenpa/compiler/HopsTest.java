@@ -77,7 +77,6 @@ public class HopsTest extends TestCase {
         compareSourceCodesWithoutError(source, expectedSource);
     }
 
-    @Ignore
     @Test
     public void hopsWithSameFromShouldFailCompile() {
         // @formatter:off
@@ -99,7 +98,6 @@ public class HopsTest extends TestCase {
         compileShouldFail(source);
     }
 
-    @Ignore
     @Test
     public void hopsAndHopAtSameMethodShouldFailCompile() {
         // @formatter:off
