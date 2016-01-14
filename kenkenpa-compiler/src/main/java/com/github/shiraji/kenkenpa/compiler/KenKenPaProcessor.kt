@@ -23,10 +23,6 @@ import javax.tools.Diagnostic.Kind.NOTE
 //@AutoService(Processor::class)
 class KenKenPaProcessor : AbstractProcessor() {
 
-    override fun getSupportedSourceVersion(): SourceVersion {
-        return SourceVersion.latest()
-    }
-
     private var mElementUtils: Elements? = null
     private var mFiler: Filer? = null
     private var mTypeUtils: Types? = null
@@ -45,35 +41,25 @@ class KenKenPaProcessor : AbstractProcessor() {
     override fun getSupportedAnnotationTypes(): Set<String?> =
             setOf(KenKenPa::class.qualifiedName, Hop::class.qualifiedName, Land::class.qualifiedName, TakeOff::class.qualifiedName)
 
+    override fun getSupportedSourceVersion(): SourceVersion = SourceVersion.latest()
+
+
     override fun init(env: ProcessingEnvironment) {
         super.init(env)
 
         mElementUtils = env.elementUtils
         mTypeUtils = env.typeUtils
         mFiler = env.filer
-
-        processingEnv.messager.printMessage(NOTE, "FOO!!")
     }
 
     override fun process(annotations: Set<TypeElement>,
                          roundEnv: RoundEnvironment): Boolean {
-
-        processingEnv.messager.printMessage(NOTE, "FOO!!2")
-
         roundEnv.getElementsAnnotatedWith(KenKenPa::class.java).forEach {
             setDefaultStateFromTypeElement(it as TypeElement)
             val typeSpecBuilder = createClassTypeSpec(it)
             writeJavaFile(it, typeSpecBuilder)
             clearData()
         }
-
-        //        val elements = roundEnv.getElementsAnnotatedWith(KenKenPa::class.java)
-        //        for (element in elements) {
-        //            setDefaultStateFromTypeElement(element)
-        //            val typeSpecBuilder = createClassTypeSpec(element)
-        //            writeJavaFile(element, typeSpecBuilder)
-        //            clearData()
-        //        }
         return true
     }
 
@@ -148,7 +134,7 @@ class KenKenPaProcessor : AbstractProcessor() {
             javaFile.writeTo(mFiler)
         } catch (e: IOException) {
             error(typeElement, "Unable to write Java file for type %s: %s", typeElement,
-                    e.message!!)
+                    e.message.toString())
         }
 
     }
