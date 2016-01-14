@@ -23,11 +23,6 @@ import javax.tools.Diagnostic.Kind.NOTE
 //@AutoService(Processor::class)
 class KenKenPaProcessor : AbstractProcessor() {
 
-    override fun getSupportedAnnotationTypes(): Set<String> {
-        return ImmutableSet.of<String>(KenKenPa::class.simpleName, Hop::class.simpleName,
-                Land::class.simpleName, TakeOff::class.simpleName)
-    }
-
     override fun getSupportedSourceVersion(): SourceVersion {
         return SourceVersion.latest()
     }
@@ -46,6 +41,9 @@ class KenKenPaProcessor : AbstractProcessor() {
     private val GENERATE_TAKEOFF_METHOD_PREFIX = "takeOff$$"
     private val GENERATE_LAND_METHOD_PREFIX = "land$$"
     private val CURRENT_STATE_FIELD_NAME = "$\$mCurrentState$$"
+
+    override fun getSupportedAnnotationTypes(): Set<String?> =
+            setOf(KenKenPa::class.qualifiedName, Hop::class.qualifiedName, Land::class.qualifiedName, TakeOff::class.qualifiedName)
 
     override fun init(env: ProcessingEnvironment) {
         super.init(env)
@@ -432,8 +430,8 @@ class KenKenPaProcessor : AbstractProcessor() {
                                 annotation: Class<out Annotation>, e: Exception) {
         val stackTrace = StringWriter()
         e.printStackTrace(PrintWriter(stackTrace))
-        error(element, "Unable to parse @%s.\n\n%s",
-                annotation.simpleName, stackTrace)
+        error(element, "Unable to parse @%s.",//\n\n%s",
+                annotation.simpleName)//, stackTrace.toString())
     }
 
     private fun error(element: Element, message: String, vararg args: Any) {
