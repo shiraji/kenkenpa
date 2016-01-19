@@ -1,8 +1,6 @@
 package com.github.shiraji.kenkenpa.compiler
 
 import com.github.shiraji.kenkenpa.annotations.*
-import com.google.common.collect.ImmutableSet
-import com.google.common.collect.Iterables
 import com.squareup.javapoet.*
 import java.io.IOException
 import java.io.PrintWriter
@@ -18,7 +16,6 @@ import javax.lang.model.type.TypeKind
 import javax.lang.model.util.Elements
 import javax.lang.model.util.Types
 import javax.tools.Diagnostic.Kind.ERROR
-import javax.tools.Diagnostic.Kind.NOTE
 
 //@AutoService(Processor::class)
 class KenKenPaProcessor : AbstractProcessor() {
@@ -156,7 +153,7 @@ class KenKenPaProcessor : AbstractProcessor() {
                         val type = TypeName.get(parameter.asType())
                         val name = parameter.simpleName.toString()
                         val parameterModifiers = parameter.modifiers
-                        val parameterBuilder = ParameterSpec.builder(type, name).addModifiers(*Iterables.toArray(parameterModifiers, Modifier::class.java))
+                        val parameterBuilder = ParameterSpec.builder(type, name).addModifiers(*parameterModifiers.toTypedArray())
                         for (mirror in parameter.annotationMirrors) {
                             parameterBuilder.addAnnotation(AnnotationSpec.get(mirror))
                         }
@@ -416,7 +413,7 @@ class KenKenPaProcessor : AbstractProcessor() {
                                 annotation: Class<out Annotation>, e: Exception) {
         val stackTrace = StringWriter()
         e.printStackTrace(PrintWriter(stackTrace))
-        error(element, "Unable to parse @%s.",//\n\n%s",
+        error(element, "Unable to parse @%s.", //\n\n%s",
                 annotation.simpleName)//, stackTrace.toString())
     }
 
