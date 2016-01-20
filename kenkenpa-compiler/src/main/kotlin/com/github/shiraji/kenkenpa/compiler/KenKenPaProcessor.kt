@@ -17,7 +17,6 @@ import javax.lang.model.util.Elements
 import javax.lang.model.util.Types
 import javax.tools.Diagnostic.Kind.ERROR
 
-//@AutoService(Processor::class)
 class KenKenPaProcessor : AbstractProcessor() {
 
     private var mElementUtils: Elements? = null
