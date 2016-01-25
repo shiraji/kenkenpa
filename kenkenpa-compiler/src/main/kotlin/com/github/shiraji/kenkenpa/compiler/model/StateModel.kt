@@ -1,7 +1,7 @@
 package com.github.shiraji.kenkenpa.compiler.model
 
-class StateModel(private val mDefaultState: String) {
+class StateModel(val defaultState: String) {
     fun isDefaultState(state: String): Boolean {
-        return mDefaultState == state
+        return defaultState == state
     }
 }
