@@ -1,6 +1,7 @@
 package com.github.shiraji.kenkenpa.compiler
 
 import com.github.shiraji.kenkenpa.annotations.*
+import com.github.shiraji.kenkenpa.compiler.model.StateModel
 import com.squareup.javapoet.*
 import java.io.IOException
 import java.io.PrintWriter
@@ -23,7 +24,6 @@ class KenKenPaProcessor : AbstractProcessor() {
     private var mFiler: Filer? = null
     private var mTypeUtils: Types? = null
 
-    private var mDefaultState: String? = null
     internal var mStates: MutableSet<String> = HashSet()
     internal var mLandMap: MutableMap<String, Element> = HashMap()
     internal var mTakeOffMap: MutableMap<String, Element> = HashMap()
@@ -33,6 +33,8 @@ class KenKenPaProcessor : AbstractProcessor() {
     private val GENERATE_TAKEOFF_METHOD_PREFIX = "takeOff$$"
     private val GENERATE_LAND_METHOD_PREFIX = "land$$"
     private val CURRENT_STATE_FIELD_NAME = "$\$mCurrentState$$"
+    
+    lateinit var stateModel: StateModel
 
     override fun getSupportedAnnotationTypes(): Set<String?> =
             setOf(KenKenPa::class.qualifiedName, Hop::class.qualifiedName, Land::class.qualifiedName, TakeOff::class.qualifiedName)
@@ -89,7 +91,7 @@ class KenKenPaProcessor : AbstractProcessor() {
 
     private fun setDefaultStateFromTypeElement(typeElement: TypeElement) {
         val annotation = typeElement.getAnnotation<KenKenPa>(KenKenPa::class.java)
-        mDefaultState = annotation.value
+        stateModel = StateModel(annotation.value)
     }
 
     private fun createClassTypeSpec(typeElement: TypeElement): TypeSpec.Builder {
@@ -168,10 +170,10 @@ class KenKenPaProcessor : AbstractProcessor() {
 
                 constructorMethodSpec = constructorMethodSpec.addStatement("super(\$L)", createSuperMethodParameterString(
                         executableElement))
-                constructorMethodSpec.addStatement("this.\$N = \$S", CURRENT_STATE_FIELD_NAME, mDefaultState)
+                constructorMethodSpec.addStatement("this.\$N = \$S", CURRENT_STATE_FIELD_NAME, stateModel.defaultState)
 
-                if (mLandMap.containsKey(mDefaultState as String)) {
-                    val defaultLandElement = mLandMap.get(mDefaultState as String)
+                if (mLandMap.containsKey(stateModel.defaultState)) {
+                    val defaultLandElement = mLandMap.get(stateModel.defaultState)
                     constructorMethodSpec.addStatement("\$L", defaultLandElement)
                 }
 
@@ -181,7 +183,7 @@ class KenKenPaProcessor : AbstractProcessor() {
 
         if (constructors.size == 0) {
             val constructorMethodSpec = MethodSpec.constructorBuilder()
-            constructorMethodSpec.addStatement("this.\$N = \$S", CURRENT_STATE_FIELD_NAME, mDefaultState)
+            constructorMethodSpec.addStatement("this.\$N = \$S", CURRENT_STATE_FIELD_NAME, stateModel.defaultState)
             constructors.add(constructorMethodSpec.build())
         }
 
@@ -240,7 +242,7 @@ class KenKenPaProcessor : AbstractProcessor() {
                     IllegalArgumentException("state %s has multiple @Land".format(land.value)))
         }
 
-        if (mDefaultState != land.value && !hasToState(land.value)) {
+        if (!stateModel.isDefaultState(land.value) && !hasToState(land.value)) {
             logParsingError(element, Land::class.java,
                     IllegalArgumentException("No state %s set Hop(to)".format(land.value)))
         }
@@ -345,7 +347,7 @@ class KenKenPaProcessor : AbstractProcessor() {
         }
         exitMethodSpec.endControlFlow()
         exitMethodSpec.addCode("// No definition! Return the default state\n")
-        exitMethodSpec.addStatement("return \$S", mDefaultState)
+        exitMethodSpec.addStatement("return \$S", stateModel.defaultState)
         return exitMethodSpec
     }
 
