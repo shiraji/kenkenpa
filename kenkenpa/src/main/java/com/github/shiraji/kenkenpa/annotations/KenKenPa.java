@@ -8,5 +8,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.TYPE)
 public @interface KenKenPa {
-    String value();
+    String defaultState();
+
+    boolean isLandFirst() default true;
 }

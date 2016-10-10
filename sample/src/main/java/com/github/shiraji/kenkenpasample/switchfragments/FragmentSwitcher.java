@@ -7,7 +7,7 @@ import com.github.shiraji.kenkenpa.annotations.KenKenPa;
 import com.github.shiraji.kenkenpa.annotations.Land;
 import com.github.shiraji.kenkenpasample.R;
 
-@KenKenPa(FragmentSwitcher.FRAGMENT1)
+@KenKenPa(defaultState = FragmentSwitcher.FRAGMENT1)
 public abstract class FragmentSwitcher {
     static final String FRAGMENT1 = "Fragment1";
     static final String FRAGMENT2 = "Fragment2";
